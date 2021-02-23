@@ -1,0 +1,77 @@
+---
+title: "Penn births cleanup"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+WHYY project data cleanup. Problem was inconsistent data in multiple sheets that needed to be combined into single data frame.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(readxl)
+library(purrr)
+```
+
+## Data problems
+
+These fixes were done in Excel before processing:
+
+- Added consistent header row to each sheet.
+- Removed excess header rows.
+- Fixed combined cesarean columns
+- Removed 1999 and earlier for various data integrity issues
+
+The exported data still needs cleaning on hospital names and possibly county names.
+
+## Import
+
+This comes from [read-xl workflows](https://readxl.tidyverse.org/articles/articles/readxl-workflows.html#concatenate-worksheets-into-one-data-frame-1).
+
+```{r}
+path <- "data-raw/births-by-hospital-cleaned.xlsx"
+sheets <- excel_sheets(path)
+births <-
+  lapply(excel_sheets(path), read_excel, path = path)
+births <- lapply(seq_along(sheets), function(i) {
+  data.frame(sheet = I(sheets[i]), births[[i]])
+})
+births <- do.call(rbind, births)
+
+births %>% glimpse()
+```
+
+## Cleaning
+
+Made county and hospital values uppercase. Pulled year from sheet name.
+
+```{r}
+births <- births %>% 
+  mutate(
+    county = county %>% str_to_upper(),
+    hospital = hospital %>% str_to_upper(),
+    year = sheet %>% str_sub(1,4)
+  ) %>% 
+  select(-sheet) %>% 
+  select(year, everything())
+
+births %>% glimpse()
+```
+
+## Export
+
+```{r}
+births %>% write_excel_csv("data-processed/penn-births.csv")
+
+births %>% 
+  filter(
+    county == "PHILADELPHIA"
+  ) %>% 
+  write_excel_csv("data-processed/phi-births.csv")
+```
+
