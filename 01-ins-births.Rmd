@@ -16,6 +16,7 @@ WHYY project data cleanup. Problem was inconsistent data in multiple sheets that
 library(tidyverse)
 library(readxl)
 library(purrr)
+library(janitor)
 ```
 
 ## Import
@@ -23,7 +24,7 @@ library(purrr)
 This comes from [read-xl workflows](https://readxl.tidyverse.org/articles/articles/readxl-workflows.html#concatenate-worksheets-into-one-data-frame-1).
 
 ```{r}
-path <- "data-raw/births-by-hospital-cleaned.xlsx"
+path <- "data-raw/insurance-births-year-hospital-philadelphia-correct-names-edit.xlsx"
 sheets <- excel_sheets(path)
 births <-
   lapply(excel_sheets(path), read_excel, path = path)
@@ -32,5 +33,28 @@ births <- lapply(seq_along(sheets), function(i) {
 })
 births <- do.call(rbind, births)
 
+births <- births %>% clean_names()
+
 births %>% glimpse()
+```
+
+## Cleaning
+
+```{r}
+births <- births %>% 
+  mutate(
+    hospital = hospital %>% str_to_upper(),
+    private = private %>% as.numeric(),
+    medicaid = private %>% as.numeric(),
+    self_pay_uninsured = private %>% as.numeric(),
+    other = private %>% as.numeric(),
+    unknown = private %>% as.numeric(),
+  )
+  
+```
+## Export
+
+```{r}
+births %>% write_excel_csv("data-processed/phi-ins-births.csv")
+
 ```
