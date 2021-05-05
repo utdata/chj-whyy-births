@@ -1,0 +1,36 @@
+---
+title: "Penn insurance births cleanup"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    df_print: paged
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_dir = "docs") })
+---
+
+WHYY project data cleanup. Problem was inconsistent data in multiple sheets that needed to be combined into single data frame.
+
+```{r setup, echo=T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(readxl)
+library(purrr)
+```
+
+## Import
+
+This comes from [read-xl workflows](https://readxl.tidyverse.org/articles/articles/readxl-workflows.html#concatenate-worksheets-into-one-data-frame-1).
+
+```{r}
+path <- "data-raw/births-by-hospital-cleaned.xlsx"
+sheets <- excel_sheets(path)
+births <-
+  lapply(excel_sheets(path), read_excel, path = path)
+births <- lapply(seq_along(sheets), function(i) {
+  data.frame(sheet = I(sheets[i]), births[[i]])
+})
+births <- do.call(rbind, births)
+
+births %>% glimpse()
+```
