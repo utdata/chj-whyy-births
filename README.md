@@ -16,5 +16,5 @@ Cleaning up Excel file for WHYY project.
 
 ## Printed notebook
 
-- [Phi births](https://https://utdata.github.io/chj-whyy-births/01-import.html)
+- [Phi births](https://utdata.github.io/chj-whyy-births/01-import.html)
 - [Phi insurance births](https://https://utdata.github.io/chj-whyy-births/01-ins-births.html)
