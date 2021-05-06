@@ -45,16 +45,17 @@ births <- births %>%
   mutate(
     hospital = hospital %>% str_to_upper(),
     private = private %>% as.numeric(),
-    medicaid = private %>% as.numeric(),
-    self_pay_uninsured = private %>% as.numeric(),
-    other = private %>% as.numeric(),
-    unknown = private %>% as.numeric(),
+    medicaid = medicaid %>% as.numeric(),
+    self_pay_uninsured = self_pay_uninsured %>% as.numeric(),
+    other = other %>% as.numeric(),
+    unknown = unknown %>% as.numeric(),
   )
-  
+
+births %>% glimpse()
 ```
+
 ## Export
 
 ```{r}
 births %>% write_excel_csv("data-processed/phi-ins-births.csv")
-
 ```

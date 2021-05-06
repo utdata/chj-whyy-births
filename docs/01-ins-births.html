@@ -2887,12 +2887,27 @@ births %&gt;% glimpse()</code></pre>
   mutate(
     hospital = hospital %&gt;% str_to_upper(),
     private = private %&gt;% as.numeric(),
-    medicaid = private %&gt;% as.numeric(),
-    self_pay_uninsured = private %&gt;% as.numeric(),
-    other = private %&gt;% as.numeric(),
-    unknown = private %&gt;% as.numeric(),
+    medicaid = medicaid %&gt;% as.numeric(),
+    self_pay_uninsured = self_pay_uninsured %&gt;% as.numeric(),
+    other = other %&gt;% as.numeric(),
+    unknown = unknown %&gt;% as.numeric(),
   )</code></pre>
 <pre><code>## Warning in private %&gt;% as.numeric(): NAs introduced by coercion</code></pre>
+<pre><code>## Warning in medicaid %&gt;% as.numeric(): NAs introduced by coercion</code></pre>
+<pre><code>## Warning in self_pay_uninsured %&gt;% as.numeric(): NAs introduced by coercion</code></pre>
+<pre><code>## Warning in other %&gt;% as.numeric(): NAs introduced by coercion</code></pre>
+<pre><code>## Warning in unknown %&gt;% as.numeric(): NAs introduced by coercion</code></pre>
+<pre class="r"><code>births %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 154
+## Columns: 8
+## $ sheet              &lt;I&lt;chr&gt;&gt; 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019,…
+## $ year               &lt;dbl&gt; 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 20…
+## $ hospital           &lt;chr&gt; &quot;ALBERT EINSTEIN&quot;, &quot;CHESTNUT HILL&quot;, &quot;CHILDREN&#39;S HO…
+## $ private            &lt;dbl&gt; 308, NA, 323, NA, 133, 1685, 3562, 169, 988, 356, …
+## $ medicaid           &lt;dbl&gt; 2440, NA, 66, NA, 381, 2391, 1586, 2114, 936, 2353…
+## $ self_pay_uninsured &lt;dbl&gt; 95, NA, NA, NA, 74, 26, NA, 86, 21, 59, NA, NA, 18…
+## $ other              &lt;dbl&gt; NA, NA, 79, NA, 54, NA, NA, 39, 219, 10, 81, NA, 1…
+## $ unknown            &lt;dbl&gt; NA, NA, NA, NA, 154, 155, NA, 27, 288, NA, NA, NA,…</code></pre>
 </div>
 <div id="export" class="section level2">
 <h2>Export</h2>
